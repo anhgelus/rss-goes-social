@@ -54,14 +54,17 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 	// length max - title - link - "..." - "\n\n" - "\n\n"
 	l := lengthMax - len(item.Title) - len(item.Link) - 3 - 2 - 2
 	content := ""
-	split := strings.Split(item.Content, " ")
+	split := strings.Split(item.Description, " ")
 	i := 0
 	for len(content+" "+split[i]) < l && i < len(split) {
 		content += " " + split[i]
 		i++
 	}
+	if i != len(split) {
+		content += "..."
+	}
 	return &postStatus{
-		Status:      fmt.Sprintf("%s\n\n%s...\n%s", item.Title, content, item.Link),
+		Status:      fmt.Sprintf("%s\n\n%s\n\n%s", item.Title, content, item.Link),
 		Visibility:  "public",
 		Language:    f.Language,
 		ContentType: "text/plain",
