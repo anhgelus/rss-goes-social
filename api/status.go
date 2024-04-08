@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/mmcdole/gofeed"
 	"go-to-social-rss/config"
-	"go-to-social-rss/feed"
 	"net/http"
 	"strings"
 )
@@ -48,7 +47,7 @@ func PostNewContent(item *gofeed.Item, f *config.Feed, cfg *config.Config) error
 	if resp.StatusCode != http.StatusOK {
 		return errors.Join(ErrRequestFailed, errors.New(fmt.Sprintf("with the status code %d", resp.StatusCode)))
 	}
-	return feed.UpdateLast(item, f, cfg)
+	return nil
 }
 
 func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
