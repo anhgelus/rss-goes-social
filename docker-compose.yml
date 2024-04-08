@@ -1,0 +1,7 @@
+services:
+  gts-rss:
+    build: .
+    volumes:
+      - ./config:/app/config
+  redis:
+    image: redis:alpine
