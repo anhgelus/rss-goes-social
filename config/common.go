@@ -10,9 +10,10 @@ import (
 )
 
 type Config struct {
-	Version string `toml:"version"`
-	Redis   Redis  `toml:"redis"`
-	Feeds   []Feed `toml:"feed"`
+	Version            string `toml:"version"`
+	FetchEveryXMinutes uint   `toml:"fetch_every_X_minutes"`
+	Redis              Redis  `toml:"redis"`
+	Feeds              []Feed `toml:"feed"`
 }
 
 type Redis struct {
@@ -41,7 +42,8 @@ func (cfg *Config) Load() {
 	data, err := os.ReadFile(Location)
 	if errors.Is(err, os.ErrNotExist) {
 		data, err = toml.Marshal(Config{
-			Version: "1",
+			Version:            "1",
+			FetchEveryXMinutes: 5,
 			Feeds: []Feed{
 				{
 					RssFeedUrl: "https://blog.example.org/rss",

@@ -13,7 +13,7 @@ type Up struct {
 }
 
 func InitFeedsChecker(cfg *config.Config) (chan<- bool, <-chan *Up) {
-	t := time.NewTicker(5 * time.Minute)
+	t := time.NewTicker(time.Duration(cfg.FetchEveryXMinutes) * time.Minute)
 	done := make(chan bool)
 	up := make(chan *Up)
 
