@@ -26,6 +26,7 @@ func main() {
 
 	go func() {
 		for u := range up {
+			slog.Info("New post", "feed", u.F.RssFeedUrl)
 			err := api.PostNewContent(u.Item, u.F, &cfg)
 			if err != nil {
 				slog.Error(err.Error())

@@ -77,16 +77,16 @@ func checkFeed(f *config.Feed, cfg *config.Config) (*gofeed.Item, error) {
 	if err != nil {
 		return nil, err
 	}
-	err = r.Close()
-	if err != nil {
-		slog.Error(err.Error())
-	}
 	if v {
 		return last, nil
 	}
 	v, err = checkNewValue(r, last.Title, f.RssFeedUrl+":"+KeyLastFeedTitle)
 	if err != nil {
 		return nil, err
+	}
+	err = r.Close()
+	if err != nil {
+		slog.Error(err.Error())
 	}
 	if v {
 		return last, nil
@@ -108,5 +108,5 @@ func checkNewValue(r *redis.Client, last string, key string) (bool, error) {
 			return true, nil
 		}
 	}
-	return res.String() != last, nil
+	return res.Val() != last, nil
 }

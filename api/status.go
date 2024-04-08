@@ -56,8 +56,12 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 	content := ""
 	split := strings.Split(item.Description, " ")
 	i := 0
-	for len(content+" "+split[i]) < l && i < len(split) {
-		content += " " + split[i]
+	for i < len(split) && len(content+" "+split[i]) < l {
+		if i == 0 {
+			content = split[i]
+		} else {
+			content += " " + split[i]
+		}
 		i++
 	}
 	if i != len(split) {
