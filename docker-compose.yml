@@ -5,3 +5,6 @@ services:
       - ./config:/app/config
   redis:
     image: redis:alpine
+    command: "redis-server --save 60 1 --loglevel warning"
+    volumes:
+      - ./data:/data
