@@ -8,6 +8,8 @@ RSS Goes Social is an application that adds RSS feeds to the Fediverse through a
 
 I recommend using Docker, but you can also build this application yourself with Go 1.22.
 
+The official Docker image is [anhgelus/rss-goes-social](https://hub.docker.com/r/anhgelus/rss-goes-social).
+
 1. Download the `docker-compose.yml` at the root of the repository.
 It contains the application and Redis.
 2. Then start it with `docker compose up -d`. It will create the config file `config/config.toml`
