@@ -1,6 +1,6 @@
 services:
-  gts-rss:
-    build: .
+  rss-goes-social:
+    image: anhgelus/rss-goes-social
     volumes:
       - ./config:/app/config
   redis:
