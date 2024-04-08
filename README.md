@@ -1,7 +1,7 @@
 # RSS Goes Social
 
-RSS Goes Social is an application putting RSS feed in the Fediverse through 
-a Mastodon-like API ([Mastodon](https://joinmastodon.org/), [GoToSocial](https://gotosocial.org), 
+RSS Goes Social is an application that adds RSS feeds to the Fediverse through a Mastodon-compatible API
+([Mastodon](https://joinmastodon.org/), [GoToSocial](https://gotosocial.org), 
 [Firefish](https://joinfirefish.org/)...).
 
 ## Usage
