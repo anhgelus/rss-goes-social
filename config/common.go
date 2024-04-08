@@ -30,10 +30,14 @@ type Feed struct {
 }
 
 const (
-	Location = "config.toml"
+	Location = "config/config.toml"
 )
 
 func (cfg *Config) Load() {
+	err := os.Mkdir("config", 0666)
+	if err != nil && !os.IsExist(err) {
+		panic(err)
+	}
 	data, err := os.ReadFile(Location)
 	if errors.Is(err, os.ErrNotExist) {
 		data, err = toml.Marshal(Config{
