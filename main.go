@@ -1,12 +1,12 @@
 package main
 
 import (
-	"go-to-social-rss/api"
 	"go-to-social-rss/config"
+	"go-to-social-rss/feed"
 )
 
 func main() {
 	cfg := config.Config{}
 	cfg.Load()
-	api.LoadFeed(&cfg)
+	feed.LoadFeed(&cfg)
 }

@@ -1,14 +1,24 @@
 package config
 
 import (
+	"context"
 	"errors"
+	"fmt"
 	"github.com/pelletier/go-toml/v2"
+	"github.com/redis/go-redis/v9"
 	"os"
 )
 
 type Config struct {
 	Version string `toml:"version"`
+	Redis   Redis  `toml:"redis"`
 	Feeds   []Feed `toml:"feed"`
+}
+
+type Redis struct {
+	Host     string `toml:"host"`
+	Port     uint   `toml:"port"`
+	Password string `toml:"password"`
 }
 
 type Feed struct {
@@ -35,6 +45,11 @@ func (cfg *Config) Load() {
 					Enabled:    false,
 				},
 			},
+			Redis: Redis{
+				Host:     "localhost",
+				Port:     6379,
+				Password: "",
+			},
 		})
 		if err != nil {
 			panic(err)
@@ -48,4 +63,13 @@ func (cfg *Config) Load() {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func (cfg *Config) GetRedis() (*redis.Client, error) {
+	c := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.Redis.Host, cfg.Redis.Port),
+		Password: cfg.Redis.Password,
+		DB:       0,
+	})
+	return c, c.Ping(context.Background()).Err()
 }
