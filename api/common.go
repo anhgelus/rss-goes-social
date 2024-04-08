@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"io"
 	"net/http"
 )
 
@@ -10,15 +11,12 @@ var (
 )
 
 func VerifyToken(url string, token string) error {
-	req, err := http.NewRequest(http.MethodGet, url, nil)
+	req, err := newRequest(http.MethodGet, url, token, nil)
 	if err != nil {
 		return err
 	}
-	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token)
 
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := doRequest(req)
 	if err != nil {
 		return err
 	}
@@ -26,4 +24,23 @@ func VerifyToken(url string, token string) error {
 		return ErrBadToken
 	}
 	return nil
+}
+
+func newRequest(method string, url string, token string, body io.Reader) (*http.Request, error) {
+	req, err := http.NewRequest(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Bearer "+token)
+	return req, nil
+}
+
+func doRequest(req *http.Request) (*http.Response, error) {
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, err
 }

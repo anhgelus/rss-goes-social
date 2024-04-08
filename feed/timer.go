@@ -7,10 +7,15 @@ import (
 	"time"
 )
 
-func InitFeedsChecker(cfg *config.Config) (chan<- bool, <-chan *gofeed.Item) {
+type Up struct {
+	Item *gofeed.Item
+	F    *config.Feed
+}
+
+func InitFeedsChecker(cfg *config.Config) (chan<- bool, <-chan *Up) {
 	t := time.NewTicker(5 * time.Minute)
 	done := make(chan bool)
-	up := make(chan *gofeed.Item)
+	up := make(chan *Up)
 
 	go func() {
 		for {
@@ -25,12 +30,14 @@ func InitFeedsChecker(cfg *config.Config) (chan<- bool, <-chan *gofeed.Item) {
 	return done, up
 }
 
-func checkFeeds(cfg *config.Config, up chan<- *gofeed.Item) {
+func checkFeeds(cfg *config.Config, up chan<- *Up) {
 	for _, f := range validFeed {
-		f, err := checkFeed(f, cfg)
-		if err != nil {
-			slog.Error(err.Error())
-		}
-		up <- f
+		go func() {
+			item, err := checkFeed(f, cfg)
+			if err != nil {
+				slog.Error(err.Error())
+			}
+			up <- &Up{Item: item, F: f}
+		}()
 	}
 }

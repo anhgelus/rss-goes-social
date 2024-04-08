@@ -29,7 +29,7 @@ func LoadFeed(cfg *config.Config) []*config.Feed {
 			continue
 		}
 		enabled++
-		err := api.VerifyToken(f.ServerUrl, f.Token)
+		err := api.VerifyToken(f.GetUrl("/api/v1/accounts/verify_credentials"), f.Token)
 		if err != nil {
 			slog.Error(err.Error())
 			continue
@@ -41,39 +41,39 @@ func LoadFeed(cfg *config.Config) []*config.Feed {
 	return validFeed
 }
 
-func UpdateLast(feed *config.Feed, item *gofeed.Item, cfg *config.Config) error {
+func UpdateLast(item *gofeed.Item, f *config.Feed, cfg *config.Config) error {
 	r, err := cfg.GetRedis()
 	if err != nil {
 		return err
 	}
 	ctx := context.Background()
 
-	if r.Set(ctx, feed.RssFeedUrl+":"+KeyLastFeedUrl, item.Link, 0).Err() != nil {
+	if r.Set(ctx, f.RssFeedUrl+":"+KeyLastFeedUrl, item.Link, 0).Err() != nil {
 		return err
 	}
-	if r.Set(ctx, feed.RssFeedUrl+":"+KeyLastFeedTitle, item.Title, 0).Err() != nil {
+	if r.Set(ctx, f.RssFeedUrl+":"+KeyLastFeedTitle, item.Title, 0).Err() != nil {
 		return err
 	}
 	return nil
 }
 
-func checkFeed(feed *config.Feed, cfg *config.Config) (*gofeed.Item, error) {
+func checkFeed(f *config.Feed, cfg *config.Config) (*gofeed.Item, error) {
 	fp := gofeed.NewParser()
-	f, err := fp.ParseURL(feed.RssFeedUrl)
+	parsed, err := fp.ParseURL(f.RssFeedUrl)
 	if err != nil {
 		return nil, err
 	}
-	if len(f.Items) == 0 {
+	if len(parsed.Items) == 0 {
 		return nil, nil
 	}
-	sort.Sort(f)
-	last := f.Items[len(f.Items)-1]
+	sort.Sort(parsed)
+	last := parsed.Items[len(parsed.Items)-1]
 	r, err := cfg.GetRedis()
 	if err != nil {
 		return nil, err
 	}
 
-	v, err := checkNewValue(r, last.Link, feed.RssFeedUrl+":"+KeyLastFeedUrl)
+	v, err := checkNewValue(r, last.Link, f.RssFeedUrl+":"+KeyLastFeedUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +84,7 @@ func checkFeed(feed *config.Feed, cfg *config.Config) (*gofeed.Item, error) {
 	if v {
 		return last, nil
 	}
-	v, err = checkNewValue(r, last.Title, feed.RssFeedUrl+":"+KeyLastFeedTitle)
+	v, err = checkNewValue(r, last.Title, f.RssFeedUrl+":"+KeyLastFeedTitle)
 	if err != nil {
 		return nil, err
 	}

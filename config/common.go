@@ -26,6 +26,7 @@ type Feed struct {
 	ServerUrl  string `toml:"server_url"`
 	Token      string `toml:"token"`
 	Enabled    bool   `toml:"enabled"`
+	Language   string `toml:"language"`
 }
 
 const (
@@ -43,6 +44,7 @@ func (cfg *Config) Load() {
 					ServerUrl:  "https://gts.example.org",
 					Token:      "account_token",
 					Enabled:    false,
+					Language:   "language of the feed (e.g. en, fr, de)",
 				},
 			},
 			Redis: Redis{
@@ -72,4 +74,17 @@ func (cfg *Config) GetRedis() (*redis.Client, error) {
 		DB:       0,
 	})
 	return c, c.Ping(context.Background()).Err()
+}
+
+func (f *Feed) GetUrl(uri string) string {
+	if f.ServerUrl[len(f.ServerUrl)-1] == '/' {
+		if uri[0] == '/' {
+			return f.ServerUrl + uri[1:]
+		}
+		return f.ServerUrl + uri
+	}
+	if uri[0] == '/' {
+		return f.ServerUrl + uri
+	}
+	return f.ServerUrl + "/" + uri
 }
