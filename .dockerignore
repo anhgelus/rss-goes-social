@@ -1,0 +1,5 @@
+.gitignore
+.idea
+LICENSE
+README.md
+feed/config.toml
