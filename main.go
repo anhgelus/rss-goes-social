@@ -1,9 +1,9 @@
 package main
 
 import (
-	"go-to-social-rss/api"
-	"go-to-social-rss/config"
-	"go-to-social-rss/feed"
+	"github.com/anhgelus/rss-goes-social/api"
+	"github.com/anhgelus/rss-goes-social/config"
+	"github.com/anhgelus/rss-goes-social/feed"
 	"log/slog"
 	"os"
 	"os/signal"

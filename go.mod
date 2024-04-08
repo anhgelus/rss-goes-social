@@ -1,4 +1,4 @@
-module go-to-social-rss
+module github.com/anhgelus/rss-goes-social
 
 go 1.22
 

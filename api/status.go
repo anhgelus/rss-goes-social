@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/anhgelus/rss-goes-social/config"
 	"github.com/mmcdole/gofeed"
-	"go-to-social-rss/config"
 	"net/http"
 	"strings"
 )

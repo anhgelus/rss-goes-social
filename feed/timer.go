@@ -1,8 +1,8 @@
 package feed
 
 import (
+	"github.com/anhgelus/rss-goes-social/config"
 	"github.com/mmcdole/gofeed"
-	"go-to-social-rss/config"
 	"log/slog"
 	"time"
 )

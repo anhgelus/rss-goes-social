@@ -4,10 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/anhgelus/rss-goes-social/api"
+	"github.com/anhgelus/rss-goes-social/config"
 	"github.com/mmcdole/gofeed"
 	"github.com/redis/go-redis/v9"
-	"go-to-social-rss/api"
-	"go-to-social-rss/config"
 	"log/slog"
 	"sort"
 )
