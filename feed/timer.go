@@ -37,7 +37,9 @@ func checkFeeds(cfg *config.Config, up chan<- *Up) {
 			if err != nil {
 				slog.Error(err.Error())
 			}
-			up <- &Up{Item: item, F: f}
+			if item != nil {
+				up <- &Up{Item: item, F: f}
+			}
 		}()
 	}
 }
