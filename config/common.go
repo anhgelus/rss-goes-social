@@ -12,9 +12,10 @@ type Config struct {
 }
 
 type Feed struct {
-	Url     string `toml:"url"`
-	Token   string `toml:"token"`
-	Enabled bool   `toml:"enabled"`
+	RssFeedUrl string `toml:"rss_feed_url"`
+	ServerUrl  string `toml:"server_url"`
+	Token      string `toml:"token"`
+	Enabled    bool   `toml:"enabled"`
 }
 
 const (
@@ -28,9 +29,10 @@ func (cfg *Config) Load() {
 			Version: "1",
 			Feeds: []Feed{
 				{
-					Url:     "rss_feed_url",
-					Token:   "account_token",
-					Enabled: false,
+					RssFeedUrl: "https://blog.example.org/rss",
+					ServerUrl:  "https://gts.example.org",
+					Token:      "account_token",
+					Enabled:    false,
 				},
 			},
 		})
