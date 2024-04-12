@@ -108,7 +108,7 @@ func (c *CLI) commandHelp(cmd *Command) {
 		for range m - len(f.Name) {
 			sep += " "
 		}
-		fmt.Printf("%s%s - %s\n", f.Name, sep, f.Help)
+		fmt.Printf("-%s%s - %s\n", f.Name, sep, f.Help)
 	}
 }
 
