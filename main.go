@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/anhgelus/rss-goes-social/api"
+	"github.com/anhgelus/rss-goes-social/cli"
 	"github.com/anhgelus/rss-goes-social/config"
 	"github.com/anhgelus/rss-goes-social/feed"
 	"log/slog"
@@ -11,6 +12,21 @@ import (
 )
 
 func main() {
+	c := cli.CLI{
+		Help: "RSS Goes Social is an application that adds RSS feeds to the Fediverse through a Mastodon-compatible API.",
+		Commands: []*cli.Command{
+			{
+				Name:    "run",
+				Help:    "Start the application",
+				Flags:   nil,
+				Handler: run,
+			},
+		},
+	}
+	c.Handle()
+}
+
+func run() {
 	cfg := config.Config{}
 	slog.Info("Loading config...")
 	cfg.Load()

@@ -27,4 +27,4 @@ go.work
 # End of https://www.toptal.com/developers/gitignore/api/go
 
 .idea
-feed/config.toml
+config/config.toml
