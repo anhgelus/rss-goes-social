@@ -11,6 +11,10 @@ import (
 )
 
 func main() {
+
+}
+
+func run() {
 	cfg := config.Config{}
 	slog.Info("Loading config...")
 	cfg.Load()
