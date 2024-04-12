@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-RUN go mod tidy && go build -o gts-rss .
+RUN go mod tidy && go build -o rss-goes-social .
 
-CMD ./gts-rss
+CMD ./rss-goes-social run
