@@ -27,12 +27,20 @@ func VerifyToken(url string, token string) error {
 }
 
 func newRequest(method string, url string, token string, body io.Reader) (*http.Request, error) {
+	req, err := newRequestNoToken(method, url, body)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Add("Authorization", "Bearer "+token)
+	return req, nil
+}
+
+func newRequestNoToken(method string, url string, body io.Reader) (*http.Request, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
 	}
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("Authorization", "Bearer "+token)
 	return req, nil
 }
 

@@ -21,6 +21,24 @@ func main() {
 				Flags:   nil,
 				Handler: run,
 			},
+			{
+				Name: "setup",
+				Help: "Setup the Mastodon application and get the token. You have to give the url to the instance " +
+					"that you want to use",
+				Flags: []*cli.Flag{
+					{
+						Name: "id",
+						Type: cli.FlagString,
+						Help: "client_id of the application (not required)",
+					},
+					{
+						Name: "secret",
+						Type: cli.FlagString,
+						Help: "client_secret of the application (not required)",
+					},
+				},
+				Handler: api.Setup,
+			},
 		},
 	}
 	c.Handle()

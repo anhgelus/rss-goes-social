@@ -81,6 +81,34 @@ enabled = true
 language = 'fr'
 ```
 
+### CLI
+
+- `rss-goes-social` and `rss-goes-social` show the help
+- `rss-goes-social help {command}` shows the help for the command
+- `rss-goes-social run` runs the application
+- `rss-goes-social setup {url}` setup the Mastodon application for the given server (url could be `https://mastodon.social`)
+
+#### Setup
+
+`setup` can be used without any flag or with two flags.
+Without any flags, you will create a new application, and you will get a new `client_id` and a new `client_secret`.
+With the two flags, you will use an existing application.
+
+If you never registered RSS Goes Social on `https://example.org`, you must use `rss-goes-social https//example.org`.
+
+If you already registered RSS Goes Social on `https://example.org`, you must use 
+`rss-goes-social setup https://example.org -id client_id -secret client_secret` where `client_id` is the client's id of
+the previous registered application and `client_secret` is the client's secret of the previous registered application.
+
+During the setup, RSS Goes Social will ask you to log in to an account and to copy a token given by the instance.
+You must log in to the account for which you wish to obtain the token.
+After the login, you have to click on the "Allow" button to allow RSS Goes Social to use this account.
+Then, the instance will give you the token. 
+You have to give this token to RSS Goes Social to finish the process and to finally get the token to put in the config.
+
+This can also be done graphically if the instance supports it.
+For example, Mastodon supports it but GoToSocial does not.
+
 ## Technologies
 
 - Go 1.22
