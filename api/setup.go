@@ -75,7 +75,7 @@ func Setup() {
 	fmt.Printf(utils.GetFullUrl(
 		url,
 		fmt.Sprintf(
-			"/oauth/authorize?%s=client_id&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code",
+			"/oauth/authorize?client_id=%s&redirect_uri=urn:ietf:wg:oauth:2.0:oob&response_type=code",
 			clientID),
 	) + "\n")
 	print("The token obtained from the link above -> ")
