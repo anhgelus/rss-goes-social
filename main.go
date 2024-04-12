@@ -23,7 +23,8 @@ func main() {
 			},
 			{
 				Name: "setup",
-				Help: "Setup the Mastodon application and get the token",
+				Help: "Setup the Mastodon application and get the token. You have to give the url to the instance " +
+					"that you want to use",
 				Flags: []*cli.Flag{
 					{
 						Name: "id",
