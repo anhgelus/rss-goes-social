@@ -69,6 +69,7 @@ func (c *CLI) findCommand(name string) *Command {
 func (c *CLI) basicHelp() {
 	println("RSS Goes Social - CLI Help")
 	println("==========================")
+	println("\n" + c.Help)
 	m := 0
 	for _, cmd := range c.Commands {
 		if m < len(cmd.Name) {
@@ -91,7 +92,10 @@ func (c *CLI) commandHelp(cmd *Command) {
 		sep += "="
 	}
 	println(d + "\n" + sep)
-
+	println("\n" + cmd.Help)
+	if cmd.Flags == nil {
+		return
+	}
 	m := 0
 	for _, f := range cmd.Flags {
 		if m < len(f.Name) {
