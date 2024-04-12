@@ -67,8 +67,9 @@ func (c *CLI) findCommand(name string) *Command {
 }
 
 func (c *CLI) basicHelp() {
-	println("RSS Goes Social - CLI Help")
-	println("==========================")
+	println("==============================")
+	println("  RSS Goes Social - CLI help")
+	println("==============================")
 	println("\n" + c.Help)
 	m := 0
 	for _, cmd := range c.Commands {
@@ -81,17 +82,17 @@ func (c *CLI) basicHelp() {
 		for range -len(cmd.Name) {
 			sep += " "
 		}
-		fmt.Printf("\n%s%s - %s\n", cmd.Name, sep, cmd.Help)
+		fmt.Printf("\n %s %s%s -> %s\n", os.Args[0], cmd.Name, sep, cmd.Help)
 	}
 }
 
 func (c *CLI) commandHelp(cmd *Command) {
-	d := "RSS Goes Social - " + cmd.Name + " Help"
+	d := "  RSS Goes Social - " + cmd.Name + " help  "
 	sep := ""
 	for range len(d) {
 		sep += "="
 	}
-	println(d + "\n" + sep)
+	fmt.Printf("%s\n%s\n%s\n", sep, d, sep)
 	println("\n" + cmd.Help)
 	if cmd.Flags == nil {
 		return
@@ -112,5 +113,5 @@ func (c *CLI) commandHelp(cmd *Command) {
 }
 
 func (c *CLI) invalidCommand() {
-	println("Invalid command. Check the help with rss-goes-social help or with rss-goes-social help {command}")
+	println("Invalid command. Check the help with rss-goes-social help or with rss-goes-social help {command}.")
 }

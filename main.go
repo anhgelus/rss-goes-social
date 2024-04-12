@@ -13,7 +13,7 @@ import (
 
 func main() {
 	c := cli.CLI{
-		Help: " RSS Goes Social is an application that adds RSS feeds to the Fediverse through a Mastodon-compatible API.",
+		Help: "RSS Goes Social is an application that adds RSS feeds to the Fediverse through a Mastodon-compatible API.",
 		Commands: []*cli.Command{
 			{
 				Name:    "run",
