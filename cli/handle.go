@@ -79,10 +79,10 @@ func (c *CLI) basicHelp() {
 	}
 	for _, cmd := range c.Commands {
 		sep := ""
-		for range -len(cmd.Name) {
+		for range m - len(cmd.Name) {
 			sep += " "
 		}
-		fmt.Printf("\n %s %s%s -> %s\n", os.Args[0], cmd.Name, sep, cmd.Help)
+		fmt.Printf(" %s %s%s -> %s\n", os.Args[0], cmd.Name, sep, cmd.Help)
 	}
 }
 
