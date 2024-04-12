@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/anhgelus/rss-goes-social/utils"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/redis/go-redis/v9"
 	"os"
@@ -83,14 +84,5 @@ func (cfg *Config) GetRedis() (*redis.Client, error) {
 }
 
 func (f *Feed) GetUrl(uri string) string {
-	if f.ServerUrl[len(f.ServerUrl)-1] == '/' {
-		if uri[0] == '/' {
-			return f.ServerUrl + uri[1:]
-		}
-		return f.ServerUrl + uri
-	}
-	if uri[0] == '/' {
-		return f.ServerUrl + uri
-	}
-	return f.ServerUrl + "/" + uri
+	return utils.GetFullUrl(f.ServerUrl, uri)
 }

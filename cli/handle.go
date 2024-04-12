@@ -21,7 +21,7 @@ type Command struct {
 
 type Flag struct {
 	Name string
-	Type *FlagType
+	Type FlagType
 	Help string
 }
 

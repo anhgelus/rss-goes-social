@@ -21,6 +21,23 @@ func main() {
 				Flags:   nil,
 				Handler: run,
 			},
+			{
+				Name: "setup",
+				Help: "Setup the Mastodon application and get the token",
+				Flags: []*cli.Flag{
+					{
+						Name: "id",
+						Type: cli.FlagString,
+						Help: "client_id of the application (not required)",
+					},
+					{
+						Name: "secret",
+						Type: cli.FlagString,
+						Help: "client_secret of the application (not required)",
+					},
+				},
+				Handler: api.Setup,
+			},
 		},
 	}
 	c.Handle()
