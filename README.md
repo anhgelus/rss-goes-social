@@ -20,7 +20,7 @@ It contains the application and Redis.
 
 The default config file is
 ```toml
-version = '1'
+version = '2'
 fetch_every_X_minutes = 5
 
 [redis]
@@ -34,31 +34,27 @@ server_url = 'https://gts.example.org'
 token = 'account_token'
 enabled = false
 language = 'language of the feed (e.g. en, fr, de)'
+tags = []
 ```
 
 Do not modify `version`.
 
-`fetch_every_X_minutes` is the time (in minute) between two fetches.
+- `fetch_every_X_minutes` is the time (in minute) between two fetches.
+- `[redis].host` is the Redis' host. If you are using the `docker-compose.yml` provided, it's `redis`.
+- `[redis].port` is the port of Redis. If you are using the `docker-compose.yml` provided, it's 6379.
+- `[redis].passowrd` is the Redis' password. If you are using the `docker-compose.yml` provided, there is no password.
+- `[[feed]].rss_feed_url` is the url of the RSS feed.
+- `[[feed]].server_url` is the url of the Mastodon-like API.
+- `[[feed]].token` is the bot's token.
+- `[[feed]].enabled` is set to true when the feed is enabled.
+- `[[feed]].language` is the language of the feed (ISO 639)
+- `[[feed]].tags` is a list of tags used when a status is published
 
-`[redis].host` is the Redis' host. If you are using the `docker-compose.yml` provided, it's `redis`.
 
-`[redis].port` is the port of Redis. If you are using the `docker-compose.yml` provided, it's 6379.
-
-`[redis].passowrd` is the Redis' password. If you are using the `docker-compose.yml` provided, there is no password.
-
-`[[feed]].rss_feed_url` is the url of the RSS feed.
-
-`[[feed]].server_url` is the url of the Mastodon-like API.
-
-`[[feed]].token` is the bot's token.
-
-`[[feed]].enabled` is set to true when the feed is enabled.
-
-`[[feed]].language` is the language of the feed (ISO 639)
 
 To add a new feed, just copy the `[[feed]]` part and edit every variable. e.g.
 ```toml
-version = '1'
+version = '2'
 fetch_every_X_minutes = 5
 
 [redis]
@@ -72,6 +68,7 @@ server_url = 'https://gts.example.org'
 token = 'account_token'
 enabled = false
 language = 'en'
+tags = ["art"]
 
 [[feed]]
 rss_feed_url = 'https://blog2.example.org/rss'
@@ -79,11 +76,12 @@ server_url = 'https://mastodon.example.org'
 token = 'account_token2'
 enabled = true
 language = 'fr'
+tags = ["gaming", "pc"]
 ```
 
 ### CLI
 
-- `rss-goes-social` and `rss-goes-social` show the help
+- `rss-goes-social` and `rss-goes-social help` show the help
 - `rss-goes-social help {command}` shows the help for the command
 - `rss-goes-social run` runs the application
 - `rss-goes-social setup {url}` setup the Mastodon application for the given server (url could be `https://mastodon.social`)
