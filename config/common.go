@@ -55,7 +55,7 @@ func (cfg *Config) Load() {
 					Token:      "account_token",
 					Enabled:    false,
 					Language:   "language of the feed (e.g. en, fr, de)",
-					Tags:       []string{"tag-one", "tag-two"},
+					Tags:       []string{"tag1", "tag2"},
 				},
 			},
 			Redis: &Redis{

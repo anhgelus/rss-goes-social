@@ -8,6 +8,7 @@ import (
 	"github.com/mmcdole/gofeed"
 	"log/slog"
 	"net/http"
+	"regexp"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ var (
 
 const (
 	lengthMax    = 500
-	lengthMaxTag = 150
+	lengthMaxTag = 100
 )
 
 type postStatus struct {
@@ -69,10 +70,10 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 	}
 	i = 0
 	for i < len(item.Categories) && len(tags+" #"+item.Categories[i]) < lengthMaxTag {
-		if i == 0 {
-			tags = "#" + item.Categories[i]
+		if len(tags) == 0 {
+			tags = "#" + genTag(item.Categories[i])
 		} else {
-			tags += " #" + item.Categories[i]
+			tags += " #" + genTag(item.Categories[i])
 		}
 		i++
 	}
@@ -105,4 +106,10 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 		Replyable:   true,
 		Likeable:    true,
 	}
+}
+
+func genTag(s string) string {
+	s = strings.Trim(s, " ")
+	s = strings.ToLower(s)
+	return string(regexp.MustCompile("[- _/]+").ReplaceAll([]byte(s), []byte("")))
 }
