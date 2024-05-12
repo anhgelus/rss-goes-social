@@ -15,7 +15,8 @@ var (
 )
 
 const (
-	lengthMax = 500
+	lengthMax    = 500
+	lengthMaxTag = 150
 )
 
 type postStatus struct {
@@ -51,11 +52,23 @@ func PostNewContent(item *gofeed.Item, f *config.Feed, cfg *config.Config) error
 }
 
 func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
-	// length max - title - link - "..." - "\n\n" - "\n\n"
-	l := lengthMax - len(item.Title) - len(item.Link) - 3 - 2 - 2
+	// generate tags
+	tags := ""
+	i := 0
+	for i < len(item.Categories) && len(tags+" #"+item.Categories[i]) < lengthMaxTag {
+		if i == 0 {
+			tags = "#" + item.Categories[i]
+		} else {
+			tags += " #" + item.Categories[i]
+		}
+		i++
+	}
+	// length max - title - link - "..." - "\n\n" - "\n\n" - "\n\n" - tags
+	l := lengthMax - len(item.Title) - len(item.Link) - 3 - 2 - 2 - len(tags)
+	// generate description
 	content := ""
 	split := strings.Split(item.Description, " ")
-	i := 0
+	i = 0
 	for i < len(split) && len(content+" "+split[i]) < l {
 		if i == 0 {
 			content = split[i]
@@ -68,7 +81,7 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 		content += "..."
 	}
 	return &postStatus{
-		Status:      fmt.Sprintf("%s\n\n%s\n\n%s", item.Title, content, item.Link),
+		Status:      fmt.Sprintf("%s\n\n%s\n\n%s\n\n%s", item.Title, content, item.Link, tags),
 		Visibility:  "public",
 		Language:    f.Language,
 		ContentType: "text/plain",
