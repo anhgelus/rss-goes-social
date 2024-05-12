@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/anhgelus/rss-goes-social/config"
 	"github.com/mmcdole/gofeed"
+	"log/slog"
 	"net/http"
 	"strings"
 )
@@ -55,6 +56,18 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 	// generate tags
 	tags := ""
 	i := 0
+	for i < len(f.Tags) && len(tags+" #"+item.Categories[i]) < lengthMaxTag {
+		if i == 0 {
+			tags = "#" + f.Tags[i]
+		} else {
+			tags += " #" + f.Tags[i]
+		}
+		i++
+	}
+	if len(tags) != len(strings.Join(f.Tags, " #"))+1 {
+		slog.Warn("There is too much tags for the feed!", "added", tags)
+	}
+	i = 0
 	for i < len(item.Categories) && len(tags+" #"+item.Categories[i]) < lengthMaxTag {
 		if i == 0 {
 			tags = "#" + item.Categories[i]

@@ -24,11 +24,12 @@ type Redis struct {
 }
 
 type Feed struct {
-	RssFeedUrl string `toml:"rss_feed_url"`
-	ServerUrl  string `toml:"server_url"`
-	Token      string `toml:"token"`
-	Enabled    bool   `toml:"enabled"`
-	Language   string `toml:"language"`
+	RssFeedUrl string   `toml:"rss_feed_url"`
+	ServerUrl  string   `toml:"server_url"`
+	Token      string   `toml:"token"`
+	Enabled    bool     `toml:"enabled"`
+	Language   string   `toml:"language"`
+	Tags       []string `toml:"tags"`
 }
 
 const (
@@ -43,7 +44,7 @@ func (cfg *Config) Load() {
 	data, err := os.ReadFile(Location)
 	if errors.Is(err, os.ErrNotExist) {
 		data, err = toml.Marshal(Config{
-			Version:            "1",
+			Version:            "2",
 			FetchEveryXMinutes: 5,
 			Feeds: []Feed{
 				{
@@ -52,6 +53,7 @@ func (cfg *Config) Load() {
 					Token:      "account_token",
 					Enabled:    false,
 					Language:   "language of the feed (e.g. en, fr, de)",
+					Tags:       []string{"tag-one", "tag-two"},
 				},
 			},
 			Redis: Redis{
@@ -67,6 +69,8 @@ func (cfg *Config) Load() {
 		if err != nil {
 			panic(err)
 		}
+	} else {
+		panic(err)
 	}
 	err = toml.Unmarshal(data, cfg)
 	if err != nil {
