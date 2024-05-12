@@ -1,5 +1,6 @@
 services:
   rss-goes-social:
+#    build: .
     image: anhgelus/rss-goes-social
     volumes:
       - ./config:/app/config

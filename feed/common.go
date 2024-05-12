@@ -34,7 +34,7 @@ func LoadFeed(cfg *config.Config) []*config.Feed {
 			slog.Error(err.Error())
 			continue
 		}
-		validFeed = append(validFeed, &f)
+		validFeed = append(validFeed, f)
 		loaded++
 	}
 	slog.Info(fmt.Sprintf("Loaded %d feed(s)/%d", loaded, enabled))

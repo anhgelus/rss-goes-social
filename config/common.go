@@ -71,7 +71,7 @@ func (cfg *Config) Load() {
 		if err != nil {
 			panic(err)
 		}
-	} else {
+	} else if err != nil {
 		panic(err)
 	}
 	err = toml.Unmarshal(data, cfg)
@@ -94,6 +94,7 @@ func (cfg *Config) updateConfig() {
 		}
 		cfg.Feeds = feeds
 	}
+	cfg.Version = Version
 	data, err := toml.Marshal(cfg)
 	if err != nil {
 		panic(err)

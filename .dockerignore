@@ -2,4 +2,4 @@
 .idea
 LICENSE
 README.md
-feed/config.toml
+config/config.toml
