@@ -7,14 +7,15 @@ import (
 	"github.com/anhgelus/rss-goes-social/utils"
 	"github.com/pelletier/go-toml/v2"
 	"github.com/redis/go-redis/v9"
+	"log/slog"
 	"os"
 )
 
 type Config struct {
-	Version            string `toml:"version"`
-	FetchEveryXMinutes uint   `toml:"fetch_every_X_minutes"`
-	Redis              Redis  `toml:"redis"`
-	Feeds              []Feed `toml:"feed"`
+	Version            string  `toml:"version"`
+	FetchEveryXMinutes uint    `toml:"fetch_every_X_minutes"`
+	Redis              *Redis  `toml:"redis"`
+	Feeds              []*Feed `toml:"feed"`
 }
 
 type Redis struct {
@@ -34,6 +35,7 @@ type Feed struct {
 
 const (
 	Location = "config/config.toml"
+	Version  = "2"
 )
 
 func (cfg *Config) Load() {
@@ -44,9 +46,9 @@ func (cfg *Config) Load() {
 	data, err := os.ReadFile(Location)
 	if errors.Is(err, os.ErrNotExist) {
 		data, err = toml.Marshal(Config{
-			Version:            "2",
+			Version:            Version,
 			FetchEveryXMinutes: 5,
-			Feeds: []Feed{
+			Feeds: []*Feed{
 				{
 					RssFeedUrl: "https://blog.example.org/rss",
 					ServerUrl:  "https://gts.example.org",
@@ -56,7 +58,7 @@ func (cfg *Config) Load() {
 					Tags:       []string{"tag-one", "tag-two"},
 				},
 			},
-			Redis: Redis{
+			Redis: &Redis{
 				Host:     "localhost",
 				Port:     6379,
 				Password: "",
@@ -76,6 +78,31 @@ func (cfg *Config) Load() {
 	if err != nil {
 		panic(err)
 	}
+	if cfg.Version != Version {
+		cfg.updateConfig()
+	}
+}
+
+func (cfg *Config) updateConfig() {
+	slog.Info("Updating config", "old_version", cfg.Version, "new_version", Version)
+	if cfg.Version == "1" {
+		slog.Info("Adding feed tags supports")
+		var feeds []*Feed
+		for _, f := range cfg.Feeds {
+			f.Tags = []string{}
+			feeds = append(feeds, f)
+		}
+		cfg.Feeds = feeds
+	}
+	data, err := toml.Marshal(cfg)
+	if err != nil {
+		panic(err)
+	}
+	err = os.WriteFile(Location, data, 0666)
+	if err != nil {
+		panic(err)
+	}
+	slog.Info("Config file updated")
 }
 
 func (cfg *Config) GetRedis() (*redis.Client, error) {
