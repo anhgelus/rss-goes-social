@@ -92,7 +92,11 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 		i++
 	}
 	if i != len(split) {
-		content += "..."
+		if len(content) > l-3 {
+			content = content[:l-3] + "..."
+		} else {
+			content += "..."
+		}
 	}
 	return &postStatus{
 		Status:      fmt.Sprintf("%s\n\n%s\n\n%s\n\n%s", item.Title, content, item.Link, tags),
