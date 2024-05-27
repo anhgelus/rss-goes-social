@@ -57,7 +57,7 @@ func genStatus(item *gofeed.Item, f *config.Feed) *postStatus {
 	// generate tags
 	tags := ""
 	i := 0
-	for i < len(f.Tags) && len(tags+" #"+item.Categories[i]) < lengthMaxTag {
+	for i < len(f.Tags) && len(tags+" #"+f.Tags[i]) < lengthMaxTag {
 		if i == 0 {
 			tags = "#" + f.Tags[i]
 		} else {
