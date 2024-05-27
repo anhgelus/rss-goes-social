@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"github.com/anhgelus/rss-goes-social/utils"
@@ -25,10 +26,11 @@ type setupApplicationCreated struct {
 	RedirectUris string `json:"redirect_uris"`
 	VapidKey     string `json:"vapid_key"`
 	Website      string `json:"website"`
+	Error        string `json:"error"`
 }
 
 type setupRequestToken struct {
-	RedirectUris string `json:"redirect_uris"`
+	RedirectUris string `json:"redirect_uri"`
 	ClientID     string `json:"client_id"`
 	ClientSecret string `json:"client_secret"`
 	GrantType    string `json:"grant_type"`
@@ -37,9 +39,10 @@ type setupRequestToken struct {
 
 type setupTokenGot struct {
 	AccessToken string `json:"access_token"`
-	CreatedAt   string `json:"created_at"`
+	CreatedAt   int    `json:"created_at"`
 	Scope       string `json:"scope"`
 	TokenType   string `json:"token_type"`
+	Error       string `json:"error"`
 }
 
 const (
@@ -117,6 +120,13 @@ func Setup() {
 		println("Error", "client_id: "+clientID, " and client_secret: "+clientSecret)
 		panic(err)
 	}
+	if tokenGot.Error != "" {
+		println(
+			"An error occurred",
+			"client_id: "+clientID, " client_secret: "+clientSecret,
+		)
+		panic(errors.New(tokenGot.Error))
+	}
 	println("Verifying the token.")
 	err = VerifyToken(url, tokenGot.AccessToken)
 	if err != nil {
@@ -165,6 +175,13 @@ func newApplication(url string, clientID *string, clientSecret *string) {
 	err = json.Unmarshal(b, &appCreated)
 	if err != nil {
 		panic(err)
+	}
+	if appCreated.Error != "" {
+		println(
+			"An error occurred",
+			"client_id: "+*clientID, " client_secret: "+*clientSecret,
+		)
+		panic(errors.New(appCreated.Error))
 	}
 	*clientID = appCreated.ClientID
 	*clientSecret = appCreated.ClientSecret
